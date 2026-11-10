@@ -44,7 +44,7 @@ export const defaults = () => ({
 });
 
 export let S = defaults();
-export const UI = { tab: 'home', workoutOpen: false, summary: null, toast: null };
+export const UI = { progressTab: null, foodDate: null, tab: 'home', workoutOpen: false, summary: null, toast: null };
 
 const subs = new Set();
 const notify = () => subs.forEach(f => f());

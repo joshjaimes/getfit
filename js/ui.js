@@ -22,6 +22,7 @@ const ICONS = {
   trophy: 'M8 4h8v5a4 4 0 0 1-8 0zM8 6H4c0 3 2 4 4 4M16 6h4c0 3-2 4-4 4M12 13v4M8 20h8',
   search: 'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-4-4',
   bolt: 'M13 2L4 14h7l-1 8 9-12h-7z',
+  calendar: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',
 };
 export const icon = (name, size = 22) => html`<svg class="icon" width=${size} height=${size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=${name === 'more' ? 3 : 2} stroke-linecap="round" stroke-linejoin="round"><path d=${ICONS[name]} /></svg>`;
 

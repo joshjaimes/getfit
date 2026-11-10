@@ -1,8 +1,8 @@
 // Offline support: app files are served from cache and refreshed in the background.
-const CACHE = 'getfit-v2';
+const CACHE = 'getfit-v3';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'css/styles.css', 'vendor/preact.js',
   'js/app.js', 'js/store.js', 'js/calc.js', 'js/data.js', 'js/ui.js', 'js/workout.js', 'js/food.js',
-  'js/scan.js', 'js/progress.js', 'js/profile.js', 'js/strava.js', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png'];
+  'js/scan.js', 'js/progress.js', 'js/profile.js', 'js/strava.js', 'js/calendar.js', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png'];
 const CDN = ['cdn.jsdelivr.net', 'tessdata.projectnaptha.com', 'unpkg.com'];
 
 self.addEventListener('install', e => {

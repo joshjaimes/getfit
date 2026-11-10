@@ -23,8 +23,10 @@ function Home() {
     if (hit) streak++; else if (k > 0) break;
   }
   return html`<div class="screen">
-    <div class="muted small">${fmtDate(today(), { weekday: 'long', month: 'long', day: 'numeric' })}</div>
-    <div class="h1">Today</div>
+    <div class="row between">
+      <div><div class="muted small">${fmtDate(today(), { weekday: 'long', month: 'long', day: 'numeric' })}</div><div class="h1">Today</div></div>
+      <button class="btn sm" onClick=${() => ui(u => { u.tab = 'progress'; u.progressTab = 'Calendar'; })}>${icon('calendar', 18)} Calendar</button>
+    </div>
 
     <button class="card tap" style="display:block;width:100%;text-align:left" onClick=${() => go('food')}>
       <div class="row" style="gap:18px">

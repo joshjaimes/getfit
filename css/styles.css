@@ -141,3 +141,17 @@ b { font-weight: 600; }
 .wk-head .icon, .ex-head .btn .icon { display: inline-block; vertical-align: -3px; }
 .tag.strava { background: rgba(252, 76, 2, 0.18); color: #fc4c02; }
 a.btn { text-decoration: none; color: inherit; }
+
+/* calendar */
+.cal { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 4px; }
+.cal-head { color: var(--muted); font-size: 12px; font-weight: 600; text-align: center; margin-bottom: 6px; }
+.cal-day { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 3px 0 5px; border-radius: 12px; min-height: 52px; color: var(--muted); }
+.cal-day.has { color: var(--text); } .cal-day.future { opacity: 0.4; } .cal-day:active { background: var(--card2); }
+.cal-num { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; font-size: 15px; }
+.cal-num.workout { background: var(--accent); color: #fff; } .cal-num.strava { background: #fc4c02; color: #fff; }
+.cal-day.today .cal-num { box-shadow: 0 0 0 2px var(--text); }
+.cal-dots { display: flex; gap: 3px; height: 6px; }
+.cal-dots i, .cal-legend i { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+i.food { background: var(--yellow); } i.photo { background: var(--purple); } i.body { background: var(--green); } i.workout { background: var(--accent); } i.strava { background: #fc4c02; }
+.cal-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin-top: 12px; font-size: 12px; color: var(--muted); } .cal-legend span { display: flex; align-items: center; gap: 5px; } .cal-legend i { width: 8px; height: 8px; }
+.seg button { padding: 0 2px; }

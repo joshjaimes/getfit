@@ -1,6 +1,6 @@
 // Food tab: daily diary, food search, scanning, custom foods and saved meals.
 import { html, useState, useRef, Sheet, ActionSheet, NumInput, Seg, Field, MacroBar, icon } from './ui.js';
-import { S, mut, uid, toast } from './store.js';
+import { S, UI, mut, uid, toast } from './store.js';
 import { COMMON_FOODS, MEALS } from './data.js';
 import { today, addDays, niceDate, targets, sumEntries, round, num } from './calc.js';
 import { BarcodeScanner, lookupBarcode, searchFoods, readLabel } from './scan.js';
@@ -180,7 +180,7 @@ function AddFood({ date, meal, onClose }) {
 
 /* ---------- diary ---------- */
 export function FoodTab() {
-  const [date, setDate] = useState(today()), [add, setAdd] = useState(null), [edit, setEdit] = useState(null), [menu, setMenu] = useState(null);
+  const [date, setDate] = useState(() => { const d = UI.foodDate || today(); UI.foodDate = null; return d; }), [add, setAdd] = useState(null), [edit, setEdit] = useState(null), [menu, setMenu] = useState(null);
   const t = targets(), day = S.entries.filter(e => e.date === date), tot = sumEntries(day), left = t.calories - tot.kcal;
   const saveMeal = mi => {
     const items = day.filter(e => e.meal === mi);

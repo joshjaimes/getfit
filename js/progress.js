@@ -1,9 +1,10 @@
 // Progress tab: workout analytics, nutrition report, bodyweight, measurements and photos.
 import { html, useState, useEffect, useRef, Sheet, NumInput, Seg, Field, LineChart, BarChart, icon, loadImage } from './ui.js';
-import { S, mut, uid, toast, kvGet, kvSet, kvDel } from './store.js';
+import { S, UI, mut, uid, toast, kvGet, kvSet, kvDel } from './store.js';
 import { MUSCLES, MEASURES } from './data.js';
 import { fromKg, toKg, fromCm, toCm, wUnit, lUnit, today, addDays, fmtDate, weekStart, e1rm, records, workoutVolume, workoutSets, targets, sumEntries, num, round, DAYS, parseDate } from './calc.js';
 import { exById, ExercisePicker } from './workout.js';
+import { Calendar } from './calendar.js';
 import { isImp, fmtDur } from './calc.js';
 
 export function logWeight(kg, date = today()) {
@@ -106,7 +107,7 @@ function NutritionStats() {
 }
 
 /* ---------- body ---------- */
-function Photo({ id }) {
+export function Photo({ id }) {
   const [src, setSrc] = useState(null);
   useEffect(() => { let on = true; kvGet('photo:' + id).then(d => on && setSrc(d)); return () => { on = false; }; }, [id]);
   return src ? html`<img src=${src} alt="Progress photo" />` : null;
@@ -180,10 +181,10 @@ function BodyStats() {
 }
 
 export function ProgressTab() {
-  const [tab, setTab] = useState('Workouts');
+  const [tab, setTab] = useState(() => { const t = UI.progressTab || 'Workouts'; UI.progressTab = null; return t; });
   return html`<div class="screen">
     <div class="h1">Progress</div>
-    <${Seg} options=${['Workouts', 'Nutrition', 'Body']} value=${tab} onChange=${setTab} />
-    ${tab === 'Workouts' ? html`<${WorkoutStats} />` : tab === 'Nutrition' ? html`<${NutritionStats} />` : html`<${BodyStats} />`}
+    <${Seg} options=${['Workouts', 'Nutrition', 'Body', 'Calendar']} value=${tab} onChange=${setTab} />
+    ${tab === 'Calendar' ? html`<${Calendar} />` : tab === 'Workouts' ? html`<${WorkoutStats} />` : tab === 'Nutrition' ? html`<${NutritionStats} />` : html`<${BodyStats} />`}
   </div>`;
 }
