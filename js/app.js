@@ -6,6 +6,7 @@ import { WorkoutTab, ActiveWorkout, WorkoutSummary, RestBar, Elapsed, startWorko
 import { FoodTab, COLORS } from './food.js';
 import { ProgressTab, logWeight } from './progress.js';
 import { ProfileTab, Onboarding } from './profile.js';
+import { initStrava } from './strava.js';
 
 function Home() {
   const [w, setW] = useState(null);
@@ -80,6 +81,7 @@ load().then(() => {
   const root = document.getElementById('app');
   root.innerHTML = '';
   render(html`<${App} />`, root);
+  initStrava();
   const local = ['localhost', '127.0.0.1'].includes(location.hostname);
   if ('serviceWorker' in navigator && !local) navigator.serviceWorker.register('sw.js').catch(() => {});
 });

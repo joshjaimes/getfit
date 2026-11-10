@@ -1,6 +1,7 @@
 // Profile tab: goals and calculated targets, settings, backup. Also the first-run setup.
 import { html, useState, useRef, Sheet, NumInput, Seg, Field } from './ui.js';
 import { S, mut, toast, exportData, importData, resetAll } from './store.js';
+import { StravaCard } from './strava.js';
 import { targets, ACTIVITY, RATES, fromKg, toKg, wUnit, isImp, round, num, today, LB } from './calc.js';
 
 const GOALS = [['cut', 'Cut', 'Lose fat'], ['maintain', 'Maintain', 'Stay the same'], ['bulk', 'Bulk', 'Build muscle']];
@@ -107,6 +108,9 @@ export function ProfileTab() {
       <${Field} label="USDA food search key (optional)" hint="Food search works without this, but only a few searches per hour. A free key from fdc.nal.usda.gov/api-key-signup removes that limit. Barcode scanning never needs it.">
         <input value=${S.settings.usdaKey || ''} onInput=${e => mut(s => { s.settings.usdaKey = e.target.value.trim(); })} placeholder="Paste key here" autocapitalize="off" autocorrect="off" /><//>
     </div>
+
+    <div class="h2"><span>Strava</span></div>
+    <${StravaCard} />
 
     <div class="h2"><span>Your data</span></div>
     <div class="card">

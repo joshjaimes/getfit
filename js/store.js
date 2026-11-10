@@ -40,6 +40,7 @@ export const defaults = () => ({
   weights: [],
   measures: [],
   photos: [],
+  stravaSkip: [], // Strava activities you removed, so they are not imported again
 });
 
 export let S = defaults();
@@ -90,6 +91,7 @@ export async function importData(text) {
 }
 export async function resetAll() {
   for (const p of S.photos) await kvDel('photo:' + p.id);
+  await kvDel('strava'); // also forgets the Strava link
   S = defaults();
   await saveNow();
   notify();

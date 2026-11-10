@@ -4,6 +4,7 @@ import { S, mut, uid, toast, kvGet, kvSet, kvDel } from './store.js';
 import { MUSCLES, MEASURES } from './data.js';
 import { fromKg, toKg, fromCm, toCm, wUnit, lUnit, today, addDays, fmtDate, weekStart, e1rm, records, workoutVolume, workoutSets, targets, sumEntries, num, round, DAYS, parseDate } from './calc.js';
 import { exById, ExercisePicker } from './workout.js';
+import { isImp, fmtDur } from './calc.js';
 
 export function logWeight(kg, date = today()) {
   mut(s => {
@@ -30,6 +31,7 @@ function WorkoutStats() {
   const muscle = {};
   thisWeek.forEach(w => w.exercises.forEach(e => { const m = exById(e.exerciseId).muscle; muscle[m] = (muscle[m] || 0) + e.sets.filter(s => s.done && s.type !== 'warmup').length; }));
   const mMax = Math.max(1, ...Object.values(muscle));
+  const cardio = thisWeek.filter(w => w.source === 'strava');
 
   let points = [], rec = null;
   if (cur) {
@@ -49,11 +51,16 @@ function WorkoutStats() {
       <div class="stat"><div class="n">${num(fromKg(thisWeek.reduce((a, w) => a + workoutVolume(w), 0), 0))}</div><div class="l">Volume (${wUnit()})</div></div>
       <div class="stat"><div class="n">${thisWeek.reduce((a, w) => a + workoutSets(w), 0)}</div><div class="l">Sets</div></div>
     </div>
+    ${cardio.length > 0 && html`<div class="card"><div class="card-title" style="margin-bottom:12px">Strava this week <span class="tag strava">STRAVA</span></div><div class="grid3">
+      <div class="stat"><div class="n">${cardio.length}</div><div class="l">Activities</div></div>
+      <div class="stat"><div class="n">${round(cardio.reduce((a, w) => a + (w.distance || 0), 0) / (isImp() ? 1609.344 : 1000), 1)}</div><div class="l">${isImp() ? 'Miles' : 'Km'}</div></div>
+      <div class="stat"><div class="n">${fmtDur(cardio.reduce((a, w) => a + (w.moving || 0), 0) * 1000)}</div><div class="l">Moving time</div></div>
+    </div></div>`}
     <div class="card"><div class="card-title">Workouts per week</div><div class="muted small" style="margin-bottom:8px">Last 8 weeks · ${done.length} total</div><${BarChart} bars=${weeks} /></div>
     <div class="card"><div class="card-title" style="margin-bottom:12px">Sets per muscle group this week</div>
       ${Object.keys(muscle).length ? MUSCLES.filter(m => muscle[m]).sort((a, b) => muscle[b] - muscle[a]).map(m => html`<div class="hbar"><span>${m}</span><div class="bar"><div style=${`width:${(muscle[m] / mMax) * 100}%`}></div></div><b>${muscle[m]}</b></div>`) : html`<div class="muted small">No sets logged yet this week.</div>`}
     </div>
-    <div class="h2"><span>Exercise progress</span></div>
+    ${cur && html`<div class="h2"><span>Exercise progress</span></div>
     <div class="card">
       <button class="row between" style="width:100%" onClick=${() => setPick(true)}><span class="card-title accent ellip">${exById(cur).name}</span><span class="accent">${icon('down', 20)}</span></button>
       <div class="chips mt">${METRICS.map(([k, l]) => html`<button class=${'chip' + (k === metric ? ' on' : '')} onClick=${() => setMetric(k)}>${l}</button>`)}</div>
@@ -65,7 +72,7 @@ function WorkoutStats() {
         <div><div class="muted small">Best set volume</div><b>${num(fromKg(rec.setVol, 0))} ${wUnit()}</b></div>
         <div><div class="muted small">Best session volume</div><b>${num(fromKg(rec.sessionVol, 0))} ${wUnit()}</b></div>
       </div>
-    </div>
+    </div>`}
     ${pick && html`<${Sheet} title="Exercises you have logged" onClose=${() => setPick(false)}>
       <div class="list">${used.map(id => exById(id)).sort((a, b) => a.name.localeCompare(b.name)).map(e => html`<button class="item tap" onClick=${() => { setExId(e.id); setPick(false); }}><div class="grow"><div class="title">${e.name}</div><div class="sub">${e.muscle}</div></div>${e.id === cur && html`<span class="accent">${icon('check')}</span>`}</button>`)}</div>
     <//>`}`;

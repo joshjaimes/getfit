@@ -139,3 +139,5 @@ b { font-weight: 600; }
 .note { background: rgba(255, 159, 10, 0.14); color: var(--orange); border-radius: 12px; padding: 10px 14px; font-size: 13px; margin-bottom: 12px; }
 
 .wk-head .icon, .ex-head .btn .icon { display: inline-block; vertical-align: -3px; }
+.tag.strava { background: rgba(252, 76, 2, 0.18); color: #fc4c02; }
+a.btn { text-decoration: none; color: inherit; }

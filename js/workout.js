@@ -2,6 +2,7 @@
 import { html, useState, useEffect, Sheet, ActionSheet, NumInput, Field, icon } from './ui.js';
 import { S, UI, mut, ui, uid, toast } from './store.js';
 import { EXERCISES, MUSCLES, EQUIPMENT, SPLITS, slug } from './data.js';
+import { StravaDetail, stravaLine } from './strava.js';
 import { fromKg, toKg, wUnit, today, fmtDur, fmtClock, fmtDate, DAYS_FULL, dayIdx, records, workoutVolume, workoutSets, num } from './calc.js';
 
 export const allEx = () => EXERCISES.concat(S.customExercises);
@@ -142,6 +143,7 @@ function RoutineEditor({ routine, onClose }) {
 
 /* ---------- past workout ---------- */
 export function WorkoutDetail({ w, onClose }) {
+  if (w.source === 'strava') return html`<${StravaDetail} w=${w} onClose=${onClose} />`;
   const saveRoutine = () => {
     mut(s => { s.routines.push({ id: uid(), name: w.name, exercises: w.exercises.map(e => ({ exerciseId: e.exerciseId, sets: e.sets.length, reps: String(e.sets[0].reps || 10), rest: e.rest || S.settings.rest })) }); });
     toast('Saved as a routine'); onClose();
@@ -330,7 +332,7 @@ export function WorkoutTab() {
     <div class="h2"><span>History</span>${hist.length > 5 && html`<button onClick=${() => setShowAll(!showAll)}>${showAll ? 'Show less' : 'Show all'}</button>`}</div>
     ${!hist.length && html`<div class="card empty">Finished workouts show up here.</div>`}
     ${hist.length > 0 && html`<div class="list">${hist.slice(0, showAll ? 500 : 5).map(w => html`<button class="item tap" onClick=${() => setDetail(w)}>
-      <div class="grow"><div class="title">${w.name}</div><div class="sub">${fmtDate(w.start, { weekday: 'short', month: 'short', day: 'numeric' })} · ${fmtDur(w.end - w.start)} · ${workoutSets(w)} sets · ${num(fromKg(workoutVolume(w), 0))} ${wUnit()}</div></div>
+      <div class="grow"><div class="title ellip">${w.name} ${w.source === 'strava' && html`<span class="tag strava">STRAVA</span>`}</div><div class="sub">${fmtDate(w.start, { weekday: 'short', month: 'short', day: 'numeric' })} · ${w.source === 'strava' ? stravaLine(w) : `${fmtDur(w.end - w.start)} · ${workoutSets(w)} sets · ${num(fromKg(workoutVolume(w), 0))} ${wUnit()}`}</div></div>
       <span class="muted">${icon('right', 16)}</span>
     </button>`)}</div>`}
   </div>
